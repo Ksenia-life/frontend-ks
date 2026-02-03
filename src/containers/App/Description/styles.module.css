@@ -1,0 +1,13 @@
+.item {
+    background-color: #b5beff;
+}
+
+.picture {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #000;
+    background-image: url("./img/pam.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
