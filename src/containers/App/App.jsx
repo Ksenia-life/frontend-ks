@@ -8,6 +8,10 @@ import { UserCard } from "../../components/UserCard";
 
 import Description from "./Description";
 
+import Posts from "../Posts/Posts";
+import Persons from "./Persons/Persons";
+import FilmsSearch from "./FilmsSearch/FilmsSearch";
+
 export default function App() {
   const user = { name: "Ксения", role: "Junior Frontend" };
 
@@ -39,6 +43,9 @@ export default function App() {
 
   return (
     <AppLayout title="React Learning Project">
+      <div style={{ color: "black", padding: "12px", fontSize: "20px" }}>
+        ТЕСТ: приложение работает
+      </div>
       <Header subtitle="Стили, события, состояние, эффекты, список и картинки" />
 
       <UserCard name={user.name} role={user.role} />
@@ -56,6 +63,17 @@ export default function App() {
       </button>
 
       {isDescriptionVisible ? <Description /> : <p>Description скрыт</p>}
+
+      
+
+      <hr />
+      <Posts />
+
+      <hr />
+      <Persons />
+
+      <hr />
+      <FilmsSearch />
     </AppLayout>
   );
 }
