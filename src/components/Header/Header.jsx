@@ -1,13 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 
 const getLinkClass = ({ isActive, isPending, isTransitioning }) => {
   return [
     styles.link,
+
     isActive ? styles.linkActive : "",
     isPending ? styles.linkPending : "",
     isTransitioning ? styles.linkTransitioning : "",
+
+    isActive ? "active" : "",
+    isPending ? "pending" : "",
+    isTransitioning ? "transitioning" : "",
   ]
     .filter(Boolean)
     .join(" ");

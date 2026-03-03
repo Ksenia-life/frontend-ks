@@ -7,15 +7,17 @@ export const favoritesSlice = createSlice({
     initialState,
     reducers: {
         addToFavorites: (state, action) => {
-            state.push(action.payload);
+            const exists = state.some((el) => el.id === action.payload.id);
+            if (!exists) {
+                state.push(action.payload);
+            }
         },
+
         removeFromFavorites: (state, action) => {
-            const data = state.filter((el) => el.id !== action.payload);
-            return [...data];
+            return state.filter((el) => el.id !== action.payload);
         },
     },
 });
 
 export const { addToFavorites, removeFromFavorites } = favoritesSlice.actions;
-
 export default favoritesSlice.reducer;

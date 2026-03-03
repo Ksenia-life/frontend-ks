@@ -47,3 +47,16 @@
     background: rgba(0, 0, 0, 0.04);
     white-space: nowrap;
 }
+
+:global(.active) {
+    font-weight: 800;
+}
+
+:global(.pending) {
+    opacity: 0.6;
+}
+
+:global(.transitioning) {
+    outline: 2px dashed rgba(0, 0, 0, 0.35);
+    outline-offset: 2px;
+}
