@@ -1,9 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./containers/App";
+import { RouterProvider } from "react-router-dom";
+
+import { router } from "./router";
+
+import "./styles/styles.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>
 );
