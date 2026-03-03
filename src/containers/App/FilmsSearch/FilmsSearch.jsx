@@ -3,6 +3,12 @@ import { searchFilms } from "../../../api/actions/films";
 import { TextInput } from "../../../components/Inputs/TextInput";
 import { SelectInput } from "../../../components/Inputs/SelectInput";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "../../../store/favorites/favoritesSlice";
+
 import styles from "./styles.module.css";
 
 const MIN_QUERY_LEN = 2;
@@ -13,6 +19,9 @@ export default function FilmsSearch() {
 
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("idle");
+
+  const favorites = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
 
   const films = useMemo(() => {
     return (data && data.films) || [];
@@ -28,7 +37,9 @@ export default function FilmsSearch() {
       });
     });
 
-    const sorted = Array.from(genresSet).sort((a, b) => a.localeCompare(b, "ru"));
+    const sorted = Array.from(genresSet).sort((a, b) =>
+      a.localeCompare(b, "ru")
+    );
 
     return [{ value: "all", label: "Все жанры" }].concat(
       sorted.map((g) => ({ value: g, label: g }))
@@ -113,7 +124,8 @@ export default function FilmsSearch() {
       {status === "success" && (
         <>
           <p className={styles.muted}>
-            Найдено: <b>{films.length}</b>, показываю: <b>{visibleFilms.length}</b>
+            Найдено: <b>{films.length}</b>, показываю:{" "}
+            <b>{visibleFilms.length}</b>
           </p>
 
           <div className={styles.grid}>
@@ -126,6 +138,22 @@ export default function FilmsSearch() {
                 .map((g) => (g && g.genre) || "")
                 .filter(Boolean)
                 .join(", ");
+
+              const isFavorite = favorites.some((el) => el.id === film.filmId);
+
+              const onFavoriteClick = () => {
+                if (isFavorite) {
+                  dispatch(removeFromFavorites(film.filmId));
+                } else {
+                  dispatch(
+                    addToFavorites({
+                      id: film.filmId,
+                      name: title,
+                      poster: film.posterUrlPreview || "",
+                    })
+                  );
+                }
+              };
 
               return (
                 <div key={film.filmId} className={styles.card}>
@@ -141,6 +169,27 @@ export default function FilmsSearch() {
                       }}
                     />
                     <div className={styles.posterStub}>Нет постера</div>
+
+                    {/* ⭐ кнопка избранного на постере */}
+                    <button
+                      type="button"
+                      className={`${styles.favBtn} ${
+                        isFavorite ? styles.favBtnActive : ""
+                      }`}
+                      onClick={onFavoriteClick}
+                      aria-label={
+                        isFavorite
+                          ? "Удалить из избранного"
+                          : "Добавить в избранное"
+                      }
+                      title={
+                        isFavorite
+                          ? "Удалить из избранного"
+                          : "Добавить в избранное"
+                      }
+                    >
+                      {isFavorite ? "★" : "☆"}
+                    </button>
                   </div>
 
                   <div className={styles.cardTitle}>{title}</div>

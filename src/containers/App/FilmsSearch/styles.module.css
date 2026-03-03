@@ -80,3 +80,23 @@
     justify-content: center;
     font-weight: 600;
 }
+
+.favBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.92);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.favBtnActive {
+    border-color: rgba(0, 0, 0, 0.35);
+}

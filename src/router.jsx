@@ -6,6 +6,9 @@ import Home from "./containers/Home";
 import Posts from "./containers/Posts/Posts";
 import Persons from "./containers/App/Persons/Persons";
 import FilmsSearch from "./containers/App/FilmsSearch/FilmsSearch";
+import UserName from "./containers/UserName";
+
+import Favorites from "./containers/Favorites";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +19,8 @@ export const router = createBrowserRouter([
       { path: "posts", Component: Posts },
       { path: "persons", Component: Persons },
       { path: "search", Component: FilmsSearch },
+      { path: "user", Component: UserName },
+      { path: "favorites", Component: Favorites },
     ],
   },
 ]);
