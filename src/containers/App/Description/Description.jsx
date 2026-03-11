@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import styles from "./styles.module.css";
-import image from "./img/pam.jpg";
+import { useEffect, useState } from 'react'
+import styles from './styles.module.css'
+import image from './img/pam.jpg'
 
 const fruits = [
-  { id: 1, name: "Яблоко", emoji: "🍎" },
-  { id: 2, name: "Банан", emoji: "🍌" },
-  { id: 3, name: "Апельсин", emoji: "🍊" },
-];
+  { id: 1, name: 'Яблоко', emoji: '🍎' },
+  { id: 2, name: 'Банан', emoji: '🍌' },
+  { id: 3, name: 'Апельсин', emoji: '🍊' },
+]
 
 export default function Description() {
-  const [isEmojiVisible, setEmojiVisible] = useState(true);
+  const [isEmojiVisible, setEmojiVisible] = useState(true)
 
   useEffect(() => {
     return () => {
-      console.log("Description: unmount (размонтирование)");
-    };
-  }, []);
+      console.log('Description: unmount (размонтирование)')
+    }
+  }, [])
 
   return (
     <section>
@@ -37,5 +37,5 @@ export default function Description() {
       <p>Картинка через img:</p>
       <img src={image} alt="City" width="220" style={{ borderRadius: 16 }} />
     </section>
-  );
+  )
 }

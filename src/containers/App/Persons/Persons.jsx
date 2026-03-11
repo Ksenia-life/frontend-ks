@@ -1,95 +1,160 @@
-import { useEffect, useMemo, useState } from "react";
-import { searchPersons } from "../../../api/actions/persons";
-import { TextInput } from "../../../components/Inputs/TextInput";
-import styles from "./styles.module.css";
+import { useEffect, useMemo, useState } from 'react'
+import { searchPersons } from '../../../api/actions/persons'
+import { TextInput } from '../../../components/Inputs/TextInput'
 
-const hasApiKey = Boolean((import.meta.env.VITE_API_KEY || "").trim());
-const MIN_QUERY_LEN = 2;
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import Alert from '@mui/material/Alert'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+
+const hasApiKey = Boolean((import.meta.env.VITE_API_KEY || '').trim())
+const MIN_QUERY_LEN = 2
 
 export default function Persons() {
-  const [name, setName] = useState("Джеймс");
-  const [data, setData] = useState(null);
-  const [status, setStatus] = useState("idle"); 
+  const [name, setName] = useState('Джеймс')
+  const [data, setData] = useState(null)
+  const [status, setStatus] = useState('idle')
 
-  const items = useMemo(() => data?.items ?? [], [data]);
+  const items = useMemo(() => data?.items ?? [], [data])
+
+  const handleNameChange = (e) => {
+    const value = e.target.value
+    setName(value)
+
+    if (value.trim().length < MIN_QUERY_LEN) {
+      setData(null)
+      setStatus('idle')
+    }
+  }
 
   useEffect(() => {
-    const q = name.trim();
+    const q = name.trim()
 
     if (q.length < MIN_QUERY_LEN) {
-      setData(null);
-      setStatus("idle");
-      return;
+      return
     }
 
     const timeoutId = setTimeout(() => {
-      (async () => {
-        setStatus("loading");
+      ;(async () => {
+        setStatus('loading')
 
-        const response = await searchPersons({ name: q, page: 1 });
+        const response = await searchPersons({ name: q, page: 1 })
 
         if (!response) {
-          setStatus("error");
-          setData(null);
-          return;
+          setStatus('error')
+          setData(null)
+          return
         }
 
-        setData(response);
-        setStatus("success");
-      })();
-    }, 350);
+        setData(response)
+        setStatus('success')
+      })()
+    }, 350)
 
-    return () => clearTimeout(timeoutId);
-  }, [name]);
+    return () => clearTimeout(timeoutId)
+  }, [name])
 
   return (
-    <section className={styles.section}>
-      <h2 className={styles.title}>Задание 2: Поиск персон</h2>
-      <p className={styles.muted}>Источник: Кинопоиск API</p>
+    <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Задание 2: Поиск персон
+      </Typography>
+
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+        Источник: Кинопоиск API
+      </Typography>
 
       {!hasApiKey && (
-        <p className={styles.muted}>
-          Нужен ключ API. Создай файл <b>.env</b> в корне проекта и добавь строку <b>VITE_API_KEY=...</b>
-        </p>
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Нужен ключ API. Создай файл <b>.env</b> в корне проекта и добавь
+          строку <b>VITE_API_KEY=...</b>
+        </Alert>
       )}
 
-      <div className={styles.controls}>
+      <Box sx={{ mb: 3, maxWidth: 520 }}>
         <TextInput
           label="Поиск персон по имени"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleNameChange}
           placeholder="Например: Джеймс Кэмерон"
         />
-      </div>
+      </Box>
 
-      {status === "idle" && (
-        <p className={styles.muted}>Введи минимум {MIN_QUERY_LEN} символа, чтобы начать поиск.</p>
+      {status === 'idle' && (
+        <Typography color="text.secondary">
+          Введи минимум {MIN_QUERY_LEN} символа, чтобы начать поиск.
+        </Typography>
       )}
 
-      {status === "loading" && <p className={styles.muted}>Загрузка…</p>}
-
-      {status === "error" && (
-        <p className={styles.error}>
-          Не получилось сходить в API Кинопоиска. Частые причины: нет ключа, неверный ключ,
-          закончился лимит запросов или заблокирован CORS.
-        </p>
+      {status === 'loading' && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <CircularProgress size={24} />
+          <Typography color="text.secondary">Загрузка…</Typography>
+        </Box>
       )}
 
-      {status === "success" && (
-        <div className={styles.grid}>
+      {status === 'error' && (
+        <Alert severity="error">
+          Не получилось сходить в API Кинопоиска. Частые причины: нет ключа,
+          неверный ключ, закончился лимит запросов или заблокирован CORS.
+        </Alert>
+      )}
+
+      {status === 'success' && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            mt: 2,
+          }}
+        >
           {items.slice(0, 12).map((p) => (
-            <div key={p.kinopoiskId ?? `${p.nameRu}-${p.sex}`} className={styles.card}>
+            <Card
+              key={p.kinopoiskId ?? `${p.nameRu}-${p.sex}`}
+              variant="outlined"
+              sx={{ width: 220, borderRadius: 3 }}
+            >
               {p.posterUrl ? (
-                <img className={styles.poster} src={p.posterUrl} alt={p.nameRu ?? ""} />
+                <CardMedia
+                  component="img"
+                  image={p.posterUrl}
+                  alt={p.nameRu ?? ''}
+                  sx={{ height: 300, objectFit: 'cover' }}
+                />
               ) : (
-                <div className={styles.posterStub}>Нет фото</div>
+                <Box
+                  sx={{
+                    height: 300,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'text.secondary',
+                    borderBottom: '1px solid',
+                    borderColor: 'divider',
+                  }}
+                >
+                  Нет фото
+                </Box>
               )}
-              <div className={styles.cardTitle}>{p.nameRu || p.nameEn || "Без имени"}</div>
-              <div className={styles.cardMeta}>{p.profession || ""}</div>
-            </div>
+
+              <CardContent>
+                <Typography variant="h6" component="div" gutterBottom>
+                  {p.nameRu || p.nameEn || 'Без имени'}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                  {p.profession || 'Профессия не указана'}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-        </div>
+        </Box>
       )}
-    </section>
-  );
+    </Paper>
+  )
 }

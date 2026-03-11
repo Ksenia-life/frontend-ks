@@ -1,16 +1,20 @@
-import styles from "./styles.module.css";
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 export function SelectInput({ label, value, onChange, options }) {
   return (
-    <label className={styles.label}>
-      <span className={styles.labelText}>{label}</span>
-      <select className={styles.select} value={value} onChange={onChange}>
+    <FormControl fullWidth size="small">
+      <InputLabel>{label}</InputLabel>
+
+      <Select value={value} label={label} onChange={onChange}>
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
+          <MenuItem key={opt.value} value={opt.value}>
             {opt.label}
-          </option>
+          </MenuItem>
         ))}
-      </select>
-    </label>
-  );
+      </Select>
+    </FormControl>
+  )
 }

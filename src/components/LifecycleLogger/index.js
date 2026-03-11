@@ -1,2 +1,1 @@
-export { default }
-from "./LifecycleLogger.jsx";
+export { default } from './LifecycleLogger.jsx'

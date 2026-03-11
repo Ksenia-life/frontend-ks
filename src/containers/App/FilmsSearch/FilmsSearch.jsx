@@ -1,205 +1,281 @@
-import { useEffect, useMemo, useState } from "react";
-import { searchFilms } from "../../../api/actions/films";
-import { TextInput } from "../../../components/Inputs/TextInput";
-import { SelectInput } from "../../../components/Inputs/SelectInput";
+import { useEffect, useMemo, useState } from 'react'
+import { searchFilms } from '../../../api/actions/films'
+import { TextInput } from '../../../components/Inputs/TextInput'
+import { SelectInput } from '../../../components/Inputs/SelectInput'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 import {
   addToFavorites,
   removeFromFavorites,
-} from "../../../store/favorites/favoritesSlice";
+} from '../../../store/favorites/favoritesSlice'
 
-import styles from "./styles.module.css";
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import Alert from '@mui/material/Alert'
+import CircularProgress from '@mui/material/CircularProgress'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import IconButton from '@mui/material/IconButton'
 
-const MIN_QUERY_LEN = 2;
+import StarBorderIcon from '@mui/icons-material/StarBorder'
+import StarIcon from '@mui/icons-material/Star'
+
+const MIN_QUERY_LEN = 2
 
 export default function FilmsSearch() {
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("all");
+  const [query, setQuery] = useState('')
+  const [genre, setGenre] = useState('all')
 
-  const [data, setData] = useState(null);
-  const [status, setStatus] = useState("idle");
+  const [data, setData] = useState(null)
+  const [status, setStatus] = useState('idle')
 
-  const favorites = useSelector((state) => state.favorites);
-  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites)
+  const dispatch = useDispatch()
 
   const films = useMemo(() => {
-    return (data && data.films) || [];
-  }, [data]);
+    return (data && data.films) || []
+  }, [data])
 
   const genreOptions = useMemo(() => {
-    const genresSet = new Set();
+    const genresSet = new Set()
 
     films.forEach((film) => {
-      const genres = (film && film.genres) || [];
+      const genres = (film && film.genres) || []
       genres.forEach((g) => {
-        if (g && g.genre) genresSet.add(g.genre);
-      });
-    });
+        if (g && g.genre) genresSet.add(g.genre)
+      })
+    })
 
     const sorted = Array.from(genresSet).sort((a, b) =>
-      a.localeCompare(b, "ru")
-    );
+      a.localeCompare(b, 'ru'),
+    )
 
-    return [{ value: "all", label: "Все жанры" }].concat(
-      sorted.map((g) => ({ value: g, label: g }))
-    );
-  }, [films]);
+    return [{ value: 'all', label: 'Все жанры' }].concat(
+      sorted.map((g) => ({ value: g, label: g })),
+    )
+  }, [films])
 
   const visibleFilms = useMemo(() => {
-    if (genre === "all") return films;
+    if (genre === 'all') return films
 
     return films.filter((film) => {
-      const genres = (film && film.genres) || [];
-      return genres.some((g) => g && g.genre === genre);
-    });
-  }, [films, genre]);
+      const genres = (film && film.genres) || []
+      return genres.some((g) => g && g.genre === genre)
+    })
+  }, [films, genre])
+
+  const handleQueryChange = (e) => {
+    const value = e.target.value
+    setQuery(value)
+
+    if (value.trim().length < MIN_QUERY_LEN) {
+      setData(null)
+      setStatus('idle')
+      setGenre('all')
+    }
+  }
 
   useEffect(() => {
-    const q = query.trim();
+    const q = query.trim()
 
     if (q.length < MIN_QUERY_LEN) {
-      setData(null);
-      setStatus("idle");
-      setGenre("all");
-      return;
+      return
     }
 
     const timeoutId = setTimeout(() => {
-      (async () => {
-        setStatus("loading");
+      ;(async () => {
+        setStatus('loading')
 
-        const response = await searchFilms({ keyword: q, page: 1 });
+        const response = await searchFilms({ keyword: q, page: 1 })
 
         if (!response) {
-          setStatus("error");
-          setData(null);
-          return;
+          setStatus('error')
+          setData(null)
+          return
         }
 
-        setData(response);
-        setStatus("success");
-        setGenre("all");
-      })();
-    }, 350);
+        setData(response)
+        setStatus('success')
+        setGenre('all')
+      })()
+    }, 350)
 
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+    return () => clearTimeout(timeoutId)
+  }, [query])
 
   return (
-    <section className={styles.section}>
-      <h2 className={styles.title}>Задание 3: Поиск и фильтр фильмов</h2>
-      <p className={styles.muted}>Источник: Кинопоиск API</p>
+    <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Задание 3: Поиск и фильтр фильмов
+      </Typography>
 
-      <div className={styles.controls}>
-        <TextInput
-          label="Поиск фильмов (реальное время)"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Например: Гарри Поттер"
-        />
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        Источник: Кинопоиск API
+      </Typography>
 
-        <SelectInput
-          label="Фильтр по жанру"
-          value={genre}
-          onChange={(e) => setGenre(e.target.value)}
-          options={genreOptions}
-        />
-      </div>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 2,
+          flexWrap: 'wrap',
+          alignItems: 'flex-start',
+          mb: 3,
+        }}
+      >
+        <Box sx={{ minWidth: 320, flex: 1 }}>
+          <TextInput
+            label="Поиск фильмов (реальное время)"
+            value={query}
+            onChange={handleQueryChange}
+            placeholder="Например: Гарри Поттер"
+          />
+        </Box>
 
-      {status === "idle" && (
-        <p className={styles.muted}>
+        <Box sx={{ minWidth: 240 }}>
+          <SelectInput
+            label="Фильтр по жанру"
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            options={genreOptions}
+          />
+        </Box>
+      </Box>
+
+      {status === 'idle' && (
+        <Typography color="text.secondary">
           Введи минимум {MIN_QUERY_LEN} символа, чтобы появился список.
-        </p>
+        </Typography>
       )}
 
-      {status === "loading" && <p className={styles.muted}>Загрузка…</p>}
+      {status === 'loading' && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <CircularProgress size={24} />
+          <Typography color="text.secondary">Загрузка…</Typography>
+        </Box>
+      )}
 
-      {status === "error" && (
-        <p className={styles.error}>
+      {status === 'error' && (
+        <Alert severity="error">
           Ошибка запроса к API Кинопоиска. Проверь ключ и попробуй ещё раз.
-        </p>
+        </Alert>
       )}
 
-      {status === "success" && (
+      {status === 'success' && (
         <>
-          <p className={styles.muted}>
-            Найдено: <b>{films.length}</b>, показываю:{" "}
+          <Typography color="text.secondary" sx={{ mb: 2 }}>
+            Найдено: <b>{films.length}</b>, показываю:{' '}
             <b>{visibleFilms.length}</b>
-          </p>
+          </Typography>
 
-          <div className={styles.grid}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 2,
+            }}
+          >
             {visibleFilms.slice(0, 16).map((film) => {
               const title =
-                (film && (film.nameRu || film.nameEn)) || "Без названия";
+                (film && (film.nameRu || film.nameEn)) || 'Без названия'
 
               const genresText = ((film && film.genres) || [])
                 .slice(0, 2)
-                .map((g) => (g && g.genre) || "")
+                .map((g) => (g && g.genre) || '')
                 .filter(Boolean)
-                .join(", ");
+                .join(', ')
 
-              const isFavorite = favorites.some((el) => el.id === film.filmId);
+              const isFavorite = favorites.some((el) => el.id === film.filmId)
 
               const onFavoriteClick = () => {
                 if (isFavorite) {
-                  dispatch(removeFromFavorites(film.filmId));
+                  dispatch(removeFromFavorites(film.filmId))
                 } else {
                   dispatch(
                     addToFavorites({
                       id: film.filmId,
                       name: title,
-                      poster: film.posterUrlPreview || "",
-                    })
-                  );
+                      poster: film.posterUrlPreview || '',
+                    }),
+                  )
                 }
-              };
+              }
 
               return (
-                <div key={film.filmId} className={styles.card}>
-                  <div className={styles.posterWrap}>
-                    <img
-                      className={styles.poster}
-                      src={film.posterUrlPreview || ""}
+                <Card
+                  key={film.filmId}
+                  variant="outlined"
+                  sx={{
+                    width: 170,
+                    borderRadius: 3,
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {film.posterUrlPreview ? (
+                    <CardMedia
+                      component="img"
+                      image={film.posterUrlPreview}
                       alt={title}
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                        const stub = e.currentTarget.nextElementSibling;
-                        if (stub) stub.style.display = "flex";
-                      }}
+                      sx={{ height: 250, objectFit: 'cover' }}
                     />
-                    <div className={styles.posterStub}>Нет постера</div>
-
-                    {/* ⭐ кнопка избранного на постере */}
-                    <button
-                      type="button"
-                      className={`${styles.favBtn} ${
-                        isFavorite ? styles.favBtnActive : ""
-                      }`}
-                      onClick={onFavoriteClick}
-                      aria-label={
-                        isFavorite
-                          ? "Удалить из избранного"
-                          : "Добавить в избранное"
-                      }
-                      title={
-                        isFavorite
-                          ? "Удалить из избранного"
-                          : "Добавить в избранное"
-                      }
+                  ) : (
+                    <Box
+                      sx={{
+                        height: 250,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'text.secondary',
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                      }}
                     >
-                      {isFavorite ? "★" : "☆"}
-                    </button>
-                  </div>
+                      Нет постера
+                    </Box>
+                  )}
 
-                  <div className={styles.cardTitle}>{title}</div>
-                  <div className={styles.cardMeta}>{genresText}</div>
-                </div>
-              );
+                  <IconButton
+                    onClick={onFavoriteClick}
+                    aria-label={
+                      isFavorite
+                        ? 'Удалить из избранного'
+                        : 'Добавить в избранное'
+                    }
+                    sx={{
+                      position: 'absolute',
+                      top: 8,
+                      right: 8,
+                      bgcolor: 'rgba(255,255,255,0.9)',
+                    }}
+                  >
+                    {isFavorite ? (
+                      <StarIcon color="warning" />
+                    ) : (
+                      <StarBorderIcon />
+                    )}
+                  </IconButton>
+
+                  <CardContent>
+                    <Typography
+                      variant="subtitle1"
+                      gutterBottom
+                      sx={{ fontWeight: 700 }}
+                    >
+                      {title}
+                    </Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+                      {genresText || 'Жанр не указан'}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              )
             })}
-          </div>
+          </Box>
         </>
       )}
-    </section>
-  );
+    </Paper>
+  )
 }

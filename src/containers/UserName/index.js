@@ -1,2 +1,1 @@
-export { default }
-from "./UserName";
+export { default } from './UserName'

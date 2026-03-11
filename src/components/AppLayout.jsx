@@ -1,11 +1,17 @@
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+
 export function AppLayout({ title, children }) {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>{title}</h1>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        {title}
+      </Typography>
 
-      <div style={{ border: "1px solid #ccc", padding: 12 }}>
+      <Paper variant="outlined" sx={{ p: 2 }}>
         {children}
-      </div>
-    </div>
-  );
+      </Paper>
+    </Box>
+  )
 }

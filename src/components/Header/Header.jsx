@@ -1,66 +1,84 @@
-import { NavLink } from "react-router";
-import { useSelector } from "react-redux";
-import styles from "./styles.module.css";
+import { NavLink } from 'react-router'
+import { useSelector } from 'react-redux'
 
-const getLinkClass = ({ isActive, isPending, isTransitioning }) => {
-  return [
-    styles.link,
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 
-    isActive ? styles.linkActive : "",
-    isPending ? styles.linkPending : "",
-    isTransitioning ? styles.linkTransitioning : "",
+import HomeIcon from '@mui/icons-material/Home'
+import ArticleIcon from '@mui/icons-material/Article'
+import PeopleIcon from '@mui/icons-material/People'
+import SearchIcon from '@mui/icons-material/Search'
+import PersonIcon from '@mui/icons-material/Person'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 
-    isActive ? "active" : "",
-    isPending ? "pending" : "",
-    isTransitioning ? "transitioning" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-};
+function NavButton({ to, icon, children, end = false }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      style={{ textDecoration: 'none' }}
+      viewTransition
+    >
+      {({ isActive }) => (
+        <Button
+          variant={isActive ? 'contained' : 'outlined'}
+          startIcon={icon}
+          size="small"
+        >
+          {children}
+        </Button>
+      )}
+    </NavLink>
+  )
+}
 
 export default function Header() {
-  const userName = useSelector((state) => state.user.name);
-  const favorites = useSelector((state) => state.favorites);
+  const userName = useSelector((state) => state.user.name)
+  const favorites = useSelector((state) => state.favorites)
 
   return (
-    <header className={styles.wrapper}>
-      <div className={styles.row}>
-        <nav className={styles.nav}>
-          <NavLink to="/" end className={getLinkClass} viewTransition>
+    <Paper variant="outlined" sx={{ p: 2, borderRadius: 3 }}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'stretch', md: 'center' }}
+        spacing={2}
+      >
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <NavButton to="/" end icon={<HomeIcon />}>
             Домашняя
-          </NavLink>
+          </NavButton>
 
-          <NavLink to="/posts" className={getLinkClass} viewTransition>
+          <NavButton to="/posts" icon={<ArticleIcon />}>
             Посты
-          </NavLink>
+          </NavButton>
 
-          <NavLink to="/persons" className={getLinkClass} viewTransition>
+          <NavButton to="/persons" icon={<PeopleIcon />}>
             Персоны
-          </NavLink>
+          </NavButton>
 
-          <NavLink to="/search" className={getLinkClass} viewTransition>
+          <NavButton to="/search" icon={<SearchIcon />}>
             Поиск фильмов
-          </NavLink>
+          </NavButton>
 
-          <NavLink to="/user" className={getLinkClass} viewTransition>
+          <NavButton to="/user" icon={<PersonIcon />}>
             Имя
-          </NavLink>
+          </NavButton>
 
-          <NavLink to="/favorites" className={getLinkClass} viewTransition>
-            Избранное - {favorites.length}
-          </NavLink>
-        </nav>
+          <NavButton to="/favorites" icon={<FavoriteIcon />}>
+            Избранное ({favorites.length})
+          </NavButton>
+        </Box>
 
-        <div className={styles.user}>
-          {userName ? (
-            <>
-              Привет, <b>{userName}</b>
-            </>
-          ) : (
-            <span>Имя не задано</span>
-          )}
-        </div>
-      </div>
-    </header>
-  );
+        <Chip
+          label={userName ? `Привет, ${userName}` : 'Имя не задано'}
+          color={userName ? 'primary' : 'default'}
+          variant={userName ? 'filled' : 'outlined'}
+        />
+      </Stack>
+    </Paper>
+  )
 }
