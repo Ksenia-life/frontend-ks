@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
@@ -14,21 +13,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 const features = [
-  'Просмотр популярных фильмов из Kinopoisk API',
-  'Поиск фильмов по ключевому слову и фильтрация по жанрам',
-  'Отдельная страница фильма с описанием, рейтингом и ссылкой на Кинопоиск',
-  'Добавление фильмов в избранное с сохранением в localStorage',
-]
-
-const technologies = [
-  'React',
-  'React Router',
-  'Redux Toolkit',
-  'Material UI',
-  'Storybook',
-  'ESLint',
-  'Prettier',
-  'Vite',
+  'Список фильмов — просматривайте популярные фильмы из Kinopoisk API',
+  'Поиск фильмов — находите фильмы по названию и фильтруйте результаты по жанру',
+  'Избранное — сохраняйте понравившиеся фильмы для быстрого доступа',
+  'Детальная информация — открывайте страницу фильма с описанием, рейтингом и ссылкой на Кинопоиск',
 ]
 
 export default function Home() {
@@ -39,13 +27,19 @@ export default function Home() {
       <Stack spacing={3}>
         <Box>
           <Typography variant="h4" component="h2" gutterBottom>
-            Movie Explorer
+            Приложение для поиска фильмов
+          </Typography>
+
+          <Typography variant="body1" color="text.secondary" paragraph>
+            Добро пожаловать в Movie Explorer — учебное React-приложение для
+            работы с фильмами. Здесь можно просматривать популярные фильмы,
+            искать их по названию, открывать подробную информацию и сохранять
+            понравившиеся карточки в избранное.
           </Typography>
 
           <Typography variant="body1" color="text.secondary">
-            Учебное React-приложение для поиска и просмотра информации о
-            фильмах. Проект показывает работу с маршрутизацией, Redux, API,
-            формами, Material UI и переиспользуемыми компонентами.
+            Начните со списка фильмов или воспользуйтесь поиском, чтобы быстро
+            найти что-то конкретное.
           </Typography>
         </Box>
 
@@ -84,7 +78,7 @@ export default function Home() {
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <InfoOutlinedIcon color="primary" />
-            <Typography variant="h6">Что умеет приложение</Typography>
+            <Typography variant="h6">Возможности приложения</Typography>
           </Stack>
 
           <Stack spacing={2}>
@@ -96,20 +90,6 @@ export default function Home() {
               >
                 <Typography variant="body1">{item}</Typography>
               </Paper>
-            ))}
-          </Stack>
-        </Box>
-
-        <Divider />
-
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Технологии проекта
-          </Typography>
-
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            {technologies.map((item) => (
-              <Chip key={item} label={item} variant="outlined" />
             ))}
           </Stack>
         </Box>

@@ -2,7 +2,6 @@ import { NavLink } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
@@ -73,7 +72,6 @@ export default function Header() {
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             Movie Explorer
           </Typography>
-          <Chip label="React + MUI + Redux" size="small" variant="outlined" />
         </Stack>
       </Stack>
     </Paper>
