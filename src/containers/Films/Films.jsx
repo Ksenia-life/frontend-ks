@@ -89,7 +89,15 @@ export default function Films() {
         {status === 'error' && <Alert severity="error">{errorMessage}</Alert>}
 
         {status === 'success' && (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 1 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, 250px)',
+              justifyContent: 'center',
+              gap: 2,
+              mt: 2,
+            }}
+          >
             {films.map((film) => {
               const id = film.filmId ?? film.kinopoiskId ?? film.id
               const isFavorite = favorites.some((item) => item.id === id)

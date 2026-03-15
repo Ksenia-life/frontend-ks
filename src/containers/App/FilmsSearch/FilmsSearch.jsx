@@ -173,7 +173,15 @@ export default function FilmsSearch() {
             <b>{visibleFilms.length}</b>
           </Typography>
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 2 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, 250px)',
+              justifyContent: 'center',
+              gap: 2,
+              mt: 2,
+            }}
+          >
             {visibleFilms.map((film) => {
               const id = film.filmId
               const isFavorite = favorites.some((item) => item.id === id)

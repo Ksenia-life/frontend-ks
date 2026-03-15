@@ -21,7 +21,8 @@ export default function FilmCard({
 
   const id = film?.filmId ?? film?.kinopoiskId ?? film?.id
   const title = film?.nameRu || film?.nameEn || film?.name || 'Без названия'
-  const poster = film?.posterUrlPreview || film?.posterUrl || film?.poster || ''
+  const poster =
+    film?.posterUrlPreview || film?.posterUrl || film?.poster || ''
   const genresText = (film?.genres || [])
     .map((item) => item?.genre)
     .filter(Boolean)
@@ -45,19 +46,30 @@ export default function FilmCard({
     <Card
       variant="outlined"
       sx={{
-        width: 220,
-        height: '100%',
+        width: 250,
         borderRadius: 3,
         position: 'relative',
+        display: 'flex',
       }}
     >
-      <CardActionArea onClick={handleOpenFilm} sx={{ height: '100%' }}>
+      <CardActionArea
+        onClick={handleOpenFilm}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+        }}
+      >
         {poster ? (
           <CardMedia
             component="img"
             image={poster}
             alt={title}
-            sx={{ height: 320, objectFit: 'cover' }}
+            sx={{
+              height: 320,
+              objectFit: 'cover',
+              flexShrink: 0,
+            }}
           />
         ) : (
           <Box
@@ -69,23 +81,49 @@ export default function FilmCard({
               color: 'text.secondary',
               borderBottom: '1px solid',
               borderColor: 'divider',
+              flexShrink: 0,
             }}
           >
             Нет постера
           </Box>
         )}
 
-        <CardContent>
+        <CardContent
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+          }}
+        >
           <Typography
-            variant="h6"
+            variant="subtitle1"
             component="div"
             gutterBottom
-            sx={{ fontWeight: 700 }}
+            sx={{
+              fontWeight: 700,
+              lineHeight: 1.3,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              minHeight: 50,
+            }}
           >
             {title}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              minHeight: 22,
+            }}
+          >
             {genresText || `ID: ${id}`}
           </Typography>
         </CardContent>

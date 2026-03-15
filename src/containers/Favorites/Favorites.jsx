@@ -22,7 +22,15 @@ export default function Favorites() {
           В избранном пока нет фильмов
         </Typography>
       ) : (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 2 }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, 250px)',
+            justifyContent: 'center',
+            gap: 2,
+            mt: 2,
+          }}
+        >
           {favorites.map((film) => (
             <FilmCard
               key={film.id}
