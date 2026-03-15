@@ -32,3 +32,6 @@
 ```bash
 npm install
 ```
+
+Деплой:
+https://ksenia-life.github.io/frontend-ks/
