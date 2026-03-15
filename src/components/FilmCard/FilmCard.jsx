@@ -21,8 +21,7 @@ export default function FilmCard({
 
   const id = film?.filmId ?? film?.kinopoiskId ?? film?.id
   const title = film?.nameRu || film?.nameEn || film?.name || 'Без названия'
-  const poster =
-    film?.posterUrlPreview || film?.posterUrl || film?.poster || ''
+  const poster = film?.posterUrlPreview || film?.posterUrl || film?.poster || ''
   const genresText = (film?.genres || [])
     .map((item) => item?.genre)
     .filter(Boolean)
