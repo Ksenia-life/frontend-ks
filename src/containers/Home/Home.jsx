@@ -1,100 +1,119 @@
-import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import Alert from '@mui/material/Alert'
 import Chip from '@mui/material/Chip'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
-import { UserCard } from '../../components/UserCard'
-import Description from '../App/Description'
+import MovieIcon from '@mui/icons-material/Movie'
+import SearchIcon from '@mui/icons-material/Search'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+
+const features = [
+  'Просмотр популярных фильмов из Kinopoisk API',
+  'Поиск фильмов по ключевому слову и фильтрация по жанрам',
+  'Отдельная страница фильма с описанием, рейтингом и ссылкой на Кинопоиск',
+  'Добавление фильмов в избранное с сохранением в localStorage',
+]
+
+const technologies = [
+  'React',
+  'React Router',
+  'Redux Toolkit',
+  'Material UI',
+  'Storybook',
+  'ESLint',
+  'Prettier',
+  'Vite',
+]
 
 export default function Home() {
-  const user = { name: 'Ксения', role: 'Junior Frontend' }
-
-  const [counter, setCounter] = useState(0)
-  const [isDescriptionVisible, setIsDescriptionVisible] = useState(true)
-
-  useEffect(() => {
-    console.log('Home: mount (смонтировался)')
-  }, [])
-
-  useEffect(() => {
-    console.log('Home: counter changed (обновление), counter =', counter)
-  }, [counter])
-
-  useEffect(() => {
-    const onResize = () => console.log('resize')
-    window.addEventListener('resize', onResize)
-
-    return () => {
-      window.removeEventListener('resize', onResize)
-      console.log('Home: unmount (размонтирование)')
-    }
-  }, [])
+  const navigate = useNavigate()
 
   return (
     <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
-      <Alert severity="success" sx={{ mb: 3 }}>
-        ТЕСТ: приложение работает
-      </Alert>
+      <Stack spacing={3}>
+        <Box>
+          <Typography variant="h4" component="h2" gutterBottom>
+            Movie Explorer
+          </Typography>
 
-      <Box sx={{ mb: 3 }}>
-        <UserCard name={user.name} role={user.role} />
-      </Box>
+          <Typography variant="body1" color="text.secondary">
+            Учебное React-приложение для поиска и просмотра информации о
+            фильмах. Проект показывает работу с маршрутизацией, Redux, API,
+            формами, Material UI и переиспользуемыми компонентами.
+          </Typography>
+        </Box>
 
-      <Divider sx={{ my: 3 }} />
-
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Counter: {counter}
-        </Typography>
-
-        <Stack direction="row" spacing={2} flexWrap="wrap">
-          <Button variant="contained" onClick={() => setCounter((prev) => prev + 1)}>
-            +1
-          </Button>
-
-          <Button variant="outlined" onClick={() => setCounter(0)}>
-            Сброс
-          </Button>
-        </Stack>
-      </Box>
-
-      <Divider sx={{ my: 3 }} />
-
-      <Box>
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
-          alignItems={{ xs: 'stretch', sm: 'center' }}
-          sx={{ mb: 2 }}
+          flexWrap="wrap"
         >
           <Button
             variant="contained"
-            onClick={() => setIsDescriptionVisible((prev) => !prev)}
+            startIcon={<MovieIcon />}
+            onClick={() => navigate('/films')}
           >
-            {isDescriptionVisible ? 'Скрыть Description' : 'Показать Description'}
+            Открыть список фильмов
           </Button>
 
-          <Chip
-            label={isDescriptionVisible ? 'Description показан' : 'Description скрыт'}
-            color={isDescriptionVisible ? 'primary' : 'default'}
-            variant={isDescriptionVisible ? 'filled' : 'outlined'}
-          />
+          <Button
+            variant="outlined"
+            startIcon={<SearchIcon />}
+            onClick={() => navigate('/search')}
+          >
+            Перейти к поиску
+          </Button>
+
+          <Button
+            variant="outlined"
+            startIcon={<FavoriteIcon />}
+            onClick={() => navigate('/favorites')}
+          >
+            Посмотреть избранное
+          </Button>
         </Stack>
 
-        {isDescriptionVisible ? (
-          <Box sx={{ mt: 2 }}>
-            <Description />
-          </Box>
-        ) : (
-          <Typography color="text.secondary">Description скрыт</Typography>
-        )}
-      </Box>
+        <Divider />
+
+        <Box>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+            <InfoOutlinedIcon color="primary" />
+            <Typography variant="h6">Что умеет приложение</Typography>
+          </Stack>
+
+          <Stack spacing={2}>
+            {features.map((item) => (
+              <Paper
+                key={item}
+                variant="outlined"
+                sx={{ p: 2, borderRadius: 2 }}
+              >
+                <Typography variant="body1">{item}</Typography>
+              </Paper>
+            ))}
+          </Stack>
+        </Box>
+
+        <Divider />
+
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Технологии проекта
+          </Typography>
+
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {technologies.map((item) => (
+              <Chip key={item} label={item} variant="outlined" />
+            ))}
+          </Stack>
+        </Box>
+      </Stack>
     </Paper>
   )
 }

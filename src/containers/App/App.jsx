@@ -5,7 +5,7 @@ import Header from '../../components/Header'
 
 export default function App() {
   return (
-    <AppLayout title="React Learning Project">
+    <AppLayout title="Movie Explorer">
       <Header />
       <Outlet />
     </AppLayout>

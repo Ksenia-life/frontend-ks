@@ -2,16 +2,15 @@ import { NavLink } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
+import Chip from '@mui/material/Chip'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
+import Typography from '@mui/material/Typography'
 
 import HomeIcon from '@mui/icons-material/Home'
-import ArticleIcon from '@mui/icons-material/Article'
-import PeopleIcon from '@mui/icons-material/People'
+import MovieIcon from '@mui/icons-material/Movie'
 import SearchIcon from '@mui/icons-material/Search'
-import PersonIcon from '@mui/icons-material/Person'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 
 function NavButton({ to, icon, children, end = false }) {
@@ -36,7 +35,6 @@ function NavButton({ to, icon, children, end = false }) {
 }
 
 export default function Header() {
-  const userName = useSelector((state) => state.user.name)
   const favorites = useSelector((state) => state.favorites)
 
   return (
@@ -49,23 +47,15 @@ export default function Header() {
       >
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <NavButton to="/" end icon={<HomeIcon />}>
-            Домашняя
+            Главная
           </NavButton>
 
-          <NavButton to="/posts" icon={<ArticleIcon />}>
-            Посты
-          </NavButton>
-
-          <NavButton to="/persons" icon={<PeopleIcon />}>
-            Персоны
+          <NavButton to="/films" icon={<MovieIcon />}>
+            Список фильмов
           </NavButton>
 
           <NavButton to="/search" icon={<SearchIcon />}>
-            Поиск фильмов
-          </NavButton>
-
-          <NavButton to="/user" icon={<PersonIcon />}>
-            Имя
+            Поиск
           </NavButton>
 
           <NavButton to="/favorites" icon={<FavoriteIcon />}>
@@ -73,11 +63,18 @@ export default function Header() {
           </NavButton>
         </Box>
 
-        <Chip
-          label={userName ? `Привет, ${userName}` : 'Имя не задано'}
-          color={userName ? 'primary' : 'default'}
-          variant={userName ? 'filled' : 'outlined'}
-        />
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
+        >
+          <MovieIcon color="primary" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            Movie Explorer
+          </Typography>
+          <Chip label="React + MUI + Redux" size="small" variant="outlined" />
+        </Stack>
       </Stack>
     </Paper>
   )

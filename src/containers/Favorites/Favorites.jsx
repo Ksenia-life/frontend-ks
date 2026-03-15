@@ -1,15 +1,15 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Grid from '@mui/material/Grid'
+
+import { FilmCard } from '../../components/FilmCard'
+import { removeFromFavorites } from '../../store/favorites/favoritesSlice'
 
 export default function Favorites() {
   const favorites = useSelector((state) => state.favorites)
+  const dispatch = useDispatch()
 
   return (
     <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
@@ -19,52 +19,19 @@ export default function Favorites() {
 
       {favorites.length === 0 ? (
         <Typography variant="body1" color="text.secondary">
-          В избранном нет фильмов
+          В избранном пока нет фильмов
         </Typography>
       ) : (
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          {favorites.map((item) => (
-            <Grid key={item.id}>
-              <Card
-                variant="outlined"
-                sx={{ width: 220, height: '100%', borderRadius: 3 }}
-              >
-                {item.poster ? (
-                  <CardMedia
-                    component="img"
-                    image={item.poster}
-                    alt={item.name}
-                    sx={{ height: 320, objectFit: 'cover' }}
-                  />
-                ) : (
-                  <Box
-                    sx={{
-                      height: 320,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'text.secondary',
-                      borderBottom: '1px solid',
-                      borderColor: 'divider',
-                    }}
-                  >
-                    Нет постера
-                  </Box>
-                )}
-
-                <CardContent>
-                  <Typography variant="h6" component="div" gutterBottom>
-                    {item.name}
-                  </Typography>
-
-                  <Typography variant="body2" color="text.secondary">
-                    ID: {item.id}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 2 }}>
+          {favorites.map((film) => (
+            <FilmCard
+              key={film.id}
+              film={film}
+              isFavorite
+              onFavoriteClick={() => dispatch(removeFromFavorites(film.id))}
+            />
           ))}
-        </Grid>
+        </Box>
       )}
     </Paper>
   )

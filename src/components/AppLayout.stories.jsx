@@ -5,7 +5,7 @@ const meta = {
   title: 'Components/AppLayout',
   component: AppLayout,
   args: {
-    title: 'React Learning Project',
+    title: 'Movie Explorer',
   },
 }
 
